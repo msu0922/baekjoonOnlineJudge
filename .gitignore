@@ -1,0 +1,4 @@
+*.exec
+.DS_Store
+*/*.exec
+.vscode/
