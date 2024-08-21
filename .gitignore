@@ -1,6 +1,7 @@
 *.exec
 .DS_Store
 */*.exec
+*/*.exe
 
 *
 !*.*
