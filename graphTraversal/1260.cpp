@@ -1,22 +1,14 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <algorithm>
 
 using namespace std;
 
-/*
-첫째 줄에 정점의 개수 N(1 ≤ N ≤ 1,000), 간선의 개수 M(1 ≤ M ≤ 10,000), 탐색을 시작할 정점의 번호 V가 주어진다. 
-다음 M개의 줄에는 간선이 연결하는 두 정점의 번호가 주어진다. 어떤 두 정점 사이에 여러 개의 간선이 있을 수 있다. 입력으로 주어지는 간선은 양방향이다.
-*/
-int N, M, V;
-
 class Node {
     public:
         int node;
-        int parent;
-        int childCnt;
         vector<int> child;
-        int depth;
         bool visited;
 };
 
@@ -27,44 +19,59 @@ void dfs(int n) {
         cout << n << ' ';
         node[n].visited = true;
 
-        if (node[n].childCnt > 1)
-        sort(node[n].child.begin(), node[n].child.end());
+        if (node[n].child.size() > 1)
+            sort(node[n].child.begin(), node[n].child.end());
     
-    for (int i = 0; i < node[n].childCnt; i++)
-        dfs(node[n].child[i]);
+        for (int i = 0; i < node[n].child.size(); i++)
+            if (!node[node[n].child[i]].visited)
+                dfs(node[n].child[i]);
     }
 }
 
 void bfs(int n) {
-    if (!node[n].visited) {
-        cout << n << ' ';
-        node[n].visited = true;
+    queue<int> q;
+    q.push(n);
+    node[n].visited = true;
+
+    while (!q.empty()) {
+        int parent = q.front();
+        q.pop();
+        cout << parent << ' ';
+        
+        if (node[parent].child.size() > 1)
+            sort(node[parent].child.begin(), node[parent].child.end());
+        
+        for (int i = 0; i < node[parent].child.size(); i++) {
+            if (!node[node[parent].child[i]].visited) {
+                q.push(node[parent].child[i]);
+                node[node[parent].child[i]].visited = true;
+            }
+        }
     }
 }
 
 int main() {
+    int N, M, V;
     cin >> N >> M >> V;
 
     int p, c;
 
     for (int i = 1; i <= N; i++) {
-        node[i].childCnt = 0;
         node[i].visited = false;
     }
-
-    node[V].depth = 1;
 
     for (int i = 1; i <= M; i++) {
         cin >> p >> c;
 
         node[p].child.push_back(c);
-        node[c].parent = p;
-        node[p].childCnt += 1;
-        node[c].depth = node[p].depth + 1;
+        node[c].child.push_back(p);
     }
 
     dfs(V);
     cout << endl;
+
+    for (int i = 1; i <= N; i++)
+        node[i].visited = false;
 
     bfs(V);
     cout << endl;
