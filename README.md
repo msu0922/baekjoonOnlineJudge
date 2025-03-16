@@ -1,4 +1,4 @@
-## 코딩 테스트 준비 with Baekjoon Online Judge
+## 코딩 테스트 준비 with Baekjoon Online Judge & 프로래머스
 #### since 2024.08.12
 
 1. 최소 주 2회 커밋(?) 도전 ㅋㅋ
